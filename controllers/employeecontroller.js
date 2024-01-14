@@ -1,17 +1,12 @@
 const Employee = require("../models/employeeModel");
+const catchAsync = require("../utils/catchAsync");
 
-exports.getAllEmployees = async (req, res) => {
+exports.getAllEmployees = catchAsync(async (req, res) => {
   const employees = await Employee.find();
+  res.status(200).json(employees);
+});
 
-  try {
-    res.json(employees);
-  } catch (error) {
-    console.error(employees);
-    res.status(500).send("Internal Server Error");
-  }
-};
-
-exports.getEmployee = async (req, res) => {
+exports.getEmployee = catchAsync(async (req, res) => {
   const employee = await Employee.findById(req.params.id);
 
   res.status(200).json({
@@ -20,9 +15,9 @@ exports.getEmployee = async (req, res) => {
       employee,
     },
   });
-};
+});
 
-exports.createEmployee = async (req, res) => {
+exports.createEmployee = catchAsync(async (req, res) => {
   const employee = await Employee.create(req.body);
 
   res.status(201).json({
@@ -31,9 +26,9 @@ exports.createEmployee = async (req, res) => {
       employee,
     },
   });
-};
+});
 
-exports.deleteEmployee = async (req, res) => {
+exports.deleteEmployee = catchAsync(async (req, res) => {
   const employee = await Employee.findByIdAndDelete(req.params.id, req.body, {
     new: true,
     runValidators: true,
@@ -45,9 +40,9 @@ exports.deleteEmployee = async (req, res) => {
       employee,
     },
   });
-};
+});
 
-exports.updateEmployee = async (req, res) => {
+exports.updateEmployee = catchAsync(async (req, res) => {
   const employee = await Employee.findByIdAndDelete(req.prams.id, re.body, {
     new: true,
     runValidators: true,
@@ -59,4 +54,4 @@ exports.updateEmployee = async (req, res) => {
       employee,
     },
   });
-};
+});
