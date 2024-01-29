@@ -4,14 +4,19 @@ const catchAsync = require("../utils/catchAsync");
 
 exports.getAllPosts = catchAsync(async (req, res) => {
     const posts = await Post.find();
-    res.status(200).json(posts);
+    res.status(200).json({
+      status: "success",
+      data: {
+        posts,
+      },
+    });
 });
 
 exports.getPost = catchAsync(async (req, res, next) => {
   const post = await Post.findById(req.params.id);
    
   if(!post){
-   return next(new AppError('no tour found with that id', 404))
+   return next(new AppError('no post found with that id', 404))
   }
   res.status(200).json({
     status: "success",
