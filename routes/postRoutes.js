@@ -6,7 +6,7 @@ const authController =  require('../controllers/authController')
 router
   .route("/")
   .get(postController.getAllPosts)
-  .post(authController.protect, postController.createPost);
+  .post(authController.protect,  postController.resizeTourImages, postController.createPost);
 
 router
   .route("/:id?")
