@@ -2,60 +2,72 @@ const Post = require("../models/postModel");
 const AppError = require("../utils/appError");
 const catchAsync = require("../utils/catchAsync");
 const multer = require("multer");
+const sharp = require("sharp")
 
 
 const multerStorage = multer.memoryStorage();
 
-const multerFilter = (req, file, cb) => {
-  if (file.mimetype.startsWith('image')) {
-    cb(null, true);
-  } else {
-    cb(new AppError('Not an image! Please upload only images.', 400), false);
-  }
-};
+// const multerFilter = (req, file, cb) => {
+//   if (file.mimetype.startsWith('image')) {
+//     cb(null, true);
+//   } else {
+//     cb(new AppError('Not an image! Please upload only images.', 400), false);
+//   }
+// };
 
 const upload = multer({
   storage: multerStorage,
-  fileFilter: multerFilter
-});
-
-exports.resizeTourImages = catchAsync(async (req, res, next) => {
-  console.log(req.files.imageCover)
-  if (!req.files.imageCover || !req.files.images) return next();
-  
-
-  // 1) Cover image
-  req.body.imageCover = `tour-${req.params.id}-${Date.now()}-cover.jpeg`;
-  await sharp(req.files.imageCover[0].buffer)
-    .resize(2000, 1333)
-    .toFormat('jpeg')
-    .jpeg({ quality: 90 })
-    .toFile(`public/img/tours/${req.body.imageCover}`);
-
-  // 2) Images
-  req.body.images = [];
-
-  await Promise.all(
-    req.files.images.map(async (file, i) => {
-      const filename = `tour-${req.params.id}-${Date.now()}-${i + 1}.jpeg`;
-
-      await sharp(file.buffer)
-        .resize(2000, 1333)
-        .toFormat('jpeg')
-        .jpeg({ quality: 90 })
-        .toFile(`public/img/tours/${filename}`);
-
-      req.body.images.push(filename);
-    })
-  );
-
-  next();
 });
 
 exports.uploadPostsImages = upload.fields([
   { name: 'imageCover', maxCount: 1 },
-  { name: 'images', maxCount: 3 }
+  { name: 'images', maxCount: 3 },
+  { name: 'videos', maxCount: 3}
 ]);
+
+exports.resizeTourImages = catchAsync(async (req, res, next) => {
+ 
+  console.log(req.body)
+  if (!req.files.imageCover || !req.files.images) return next();
+  
+
+  // 1) Cover image
+  // req.body.imageCover = `tour-${req.params.id}-${Date.now()}-cover.jpeg`;
+  base64Image = Buffer.from(req.files.imageCover[0].buffer).toString('base64');
+  req.body.imageCover = {
+    data: base64Image,
+    contentType: req.files.imageCover[0].mimetype
+  };
+
+  
+
+console.log(req.body.imageCover)
+
+  next();
+});
+
+exports.resizeTourVideos = catchAsync(async (req, res, next) => {
+ 
+  console.log(req.body)
+  if (!req.files.videos) return next();
+  
+
+  // 1) Cover image
+  // req.body.imageCover = `tour-${req.params.id}-${Date.now()}-cover.jpeg`;
+  base64Video = Buffer.from(req.files.videos[0].buffer).toString('base64');
+  req.body.videos = {
+    data: base64Video,
+    contentType: req.files.videos[0].mimetype
+  };
+
+  
+
+console.log(req.body.videos)
+
+  next();
+});
+
+
 
 
 exports.getAllPosts = catchAsync(async (req, res) => {
@@ -84,6 +96,7 @@ exports.getPost = catchAsync(async (req, res, next) => {
 
 exports.createPost = catchAsync(async (req, res) => {
   const newPost = await Post.create(req.body);
+  console.log(83)
   console.log(newPost)
   res.status(201).json({
     status: "success",

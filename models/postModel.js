@@ -12,11 +12,14 @@ const postSchema = new mongoose.Schema({
     required: [true, "A post must have a Text"],
   },
   imageCover: {
-    type: String,
+    type: {contentType: String, data: String},
     required: [true, 'A post must have a cover image']
   },
   images: {
     type: String,
+  },
+  videos: {
+    type: {contentType: String, data: String}
   },
   createdAt: {
     type: Date,

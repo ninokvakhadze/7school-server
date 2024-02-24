@@ -27,6 +27,7 @@
     "nodemailer": "^6.9.8",
     "punycode": "^2.3.1",
     "routes": "^2.1.0",
+    "sharp": "^0.33.2",
     "slugify": "^1.6.6",
     "userland": "^0.4.1",
     "validator": "^13.11.0",
