@@ -7,13 +7,6 @@ const sharp = require("sharp")
 
 const multerStorage = multer.memoryStorage();
 
-// const multerFilter = (req, file, cb) => {
-//   if (file.mimetype.startsWith('image')) {
-//     cb(null, true);
-//   } else {
-//     cb(new AppError('Not an image! Please upload only images.', 400), false);
-//   }
-// };
 
 const upload = multer({
   storage: multerStorage,
@@ -21,14 +14,35 @@ const upload = multer({
 
 exports.uploadPostsImages = upload.fields([
   { name: 'imageCover', maxCount: 1 },
-  { name: 'images', maxCount: 3 },
-  { name: 'videos', maxCount: 3}
+  { name: 'images', maxCount: 30 },
+  { name: 'file', maxCount: 1 }
 ]);
 
-exports.resizeTourImages = catchAsync(async (req, res, next) => {
+exports.uploadFiles = catchAsync(async (req, res, next) => {
  
   console.log(req.body)
-  if (!req.files.imageCover || !req.files.images) return next();
+  if (!req.files.file) return next();
+  
+
+  // 1) Cover image
+  // req.body.imageCover = `tour-${req.params.id}-${Date.now()}-cover.jpeg`;
+  base64File = Buffer.from(req.files.file[0].buffer).toString('base64');
+  req.body.file = {
+    data: base64File,
+    contentType: req.files.file[0].mimetype
+  };
+
+  
+
+console.log(req.body.file)
+
+  next();
+});
+
+exports.resizeCoverImages = catchAsync(async (req, res, next) => {
+ 
+  console.log(req.body)
+  if (!req.files.imageCover) return next();
   
 
   // 1) Cover image
@@ -46,23 +60,25 @@ console.log(req.body.imageCover)
   next();
 });
 
-exports.resizeTourVideos = catchAsync(async (req, res, next) => {
+exports.resizePostPhotosAndVideos= catchAsync(async (req, res, next) => {
  
   console.log(req.body)
-  if (!req.files.videos) return next();
+  if (!req.files.images) return next();
   
 
   // 1) Cover image
   // req.body.imageCover = `tour-${req.params.id}-${Date.now()}-cover.jpeg`;
-  base64Video = Buffer.from(req.files.videos[0].buffer).toString('base64');
-  req.body.videos = {
-    data: base64Video,
-    contentType: req.files.videos[0].mimetype
-  };
+  req.body.images = req.files.images.map((file) => {
+    const base64Image = Buffer.from(file.buffer).toString('base64');
+    return {
+      data: base64Image,
+      contentType: file.mimetype
+    };
+  });
+  
 
   
 
-console.log(req.body.videos)
 
   next();
 });
@@ -96,8 +112,7 @@ exports.getPost = catchAsync(async (req, res, next) => {
 
 exports.createPost = catchAsync(async (req, res) => {
   const newPost = await Post.create(req.body);
-  console.log(83)
-  console.log(newPost)
+  
   res.status(201).json({
     status: "success",
     data: {

@@ -3,11 +3,20 @@ const catchAsync = require("../utils/catchAsync");
 
 exports.getAllEmployees = catchAsync(async (req, res) => {
   const employees = await Employee.find();
-  res.status(200).json(employees);
+  res.status(200).json({
+    status: "success",
+    data: {
+      employees
+    },
+  });
 });
 
 exports.getEmployee = catchAsync(async (req, res) => {
   const employee = await Employee.findById(req.params.id);
+
+   if (!employee) {
+    return next(new AppError("no employee found with that id", 404));
+  }
 
   res.status(200).json({
     status: "success",

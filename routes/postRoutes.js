@@ -9,8 +9,8 @@ router
   .post(
     authController.protect,
     postController.uploadPostsImages,
-    postController.resizeTourImages,
-    postController.resizeTourVideos,
+    postController.resizeCoverImages,
+    postController.resizePostPhotosAndVideos,
     postController.createPost
   );
 
@@ -18,6 +18,12 @@ router
   .route("/:id?")
   .get(postController.getPost)
   .delete(authController.protect, postController.deletePost)
-  .patch(authController.protect, postController.updatePost);
+  .patch(
+    authController.protect,
+    postController.uploadPostsImages,
+    postController.resizeCoverImages,
+    postController.resizePostPhotosAndVideos,
+    postController.updatePost
+  );
 
 module.exports = router;

@@ -1,17 +1,26 @@
 const express = require("express");
 const router = express.Router();
 const employeecontroller = require("../controllers/employeecontroller");
+const authController = require("../controllers/authController");
+const postController = require("../controllers/postController")
 
 router
   .route("/")
   .get(employeecontroller.getAllEmployees)
-  .post(employeecontroller.createEmployee);
+  .post(
+    authController.protect,
+    postController.resizeCoverImages,
+    employeecontroller.createEmployee
+  );
 
-
-  router
+router
   .route("/:id?")
   .get(employeecontroller.getEmployee)
-  .delete(employeecontroller.deleteEmployee)
-  .patch(employeecontroller.updateEmployee)
+  .delete(authController.protect, employeecontroller.deleteEmployee)
+  .patch(
+    authController.protect,
+    postController.resizeCoverImages,
+    employeecontroller.updateEmployee
+  );
 
-  module.exports = router
+module.exports = router;
