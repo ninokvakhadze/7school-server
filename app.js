@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const postRoutes = require("./routes/postRoutes");
 const employeeRoutes = require("./routes/employeeRoutes");
+const fileRoutes = require("./routes/fileRoutes")
 const AppError = require("./utils/appError");
 const globalErrorHandler = require("./controllers/errorController");
 const userRoutes = require("./routes/userRoutes");
@@ -57,6 +58,7 @@ const DB = process.env.DATABASE.replace(
 
 app.use("/api/posts", postRoutes);
 app.use("/api/employees", employeeRoutes);
+app.use("/api/files", fileRoutes);
 app.use("/api/user", userRoutes);
 
 app.all("*", (req, res, next) => {
