@@ -7,7 +7,7 @@ router
   .route("/")
   .get(postController.getAllPosts)
   .post(
-    authController.protect,
+    // authController.protect,
     postController.uploadPostsImages,
     postController.resizeCoverImages,
     postController.resizePostPhotosAndVideos,
