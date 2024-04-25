@@ -12,7 +12,7 @@ const employeeSchema = new mongoose.Schema({
     required: [true, "A employee must have a Text"],
   },
   imageCover: {
-    type: String,
+    type: {contentType: String, data: String},
     required: [true, "A employee must have a cover image"],
   },
   position: {
