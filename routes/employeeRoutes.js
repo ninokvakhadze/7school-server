@@ -8,8 +8,10 @@ router
   .route("/")
   .get(employeecontroller.getAllEmployees)
   .post(
-    authController.protect,
+    // authController.protect,
+    postController.uploadPostsImages,
     postController.resizeCoverImages,
+    postController.resizePostPhotosAndVideos,
     employeecontroller.createEmployee
   );
 
