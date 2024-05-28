@@ -52,7 +52,7 @@ exports.deleteEmployee = catchAsync(async (req, res) => {
 });
 
 exports.updateEmployee = catchAsync(async (req, res) => {
-  const employee = await Employee.findByIdAndDelete(req.prams.id, re.body, {
+  const employee = await Employee.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true,
   });

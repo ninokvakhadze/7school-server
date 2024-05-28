@@ -8,7 +8,7 @@ const fileSchema = new mongoose.Schema({
       trim: true,
     },
     file: {
-      type: [{contentType: String, data: String}],
+      type: {contentType: String, data: String},
       required: [true, "A file is needed"],
     },
     createdAt: {

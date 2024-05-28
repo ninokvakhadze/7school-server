@@ -17,9 +17,11 @@ router
 router
   .route("/:id?")
   .get(postController.getPost)
-  .delete(authController.protect, postController.deletePost)
+  .delete(
+    // authController.protect, 
+    postController.deletePost)
   .patch(
-    authController.protect,
+    // authController.protect,
     postController.uploadPostsImages,
     postController.resizeCoverImages,
     postController.resizePostPhotosAndVideos,

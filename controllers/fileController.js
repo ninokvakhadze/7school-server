@@ -53,7 +53,7 @@ exports.getAllFiles = catchAsync(async (req, res) => {
   });
   
   exports.updateFile = catchAsync(async (req, res) => {
-    const file = await File.findByIdAndDelete(req.prams.id, req.body, {
+    const file = await File.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true,
     });
