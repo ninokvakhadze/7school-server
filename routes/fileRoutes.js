@@ -9,7 +9,10 @@ router
   .route("/")
   .get(filesController.getAllFiles)
   .post(
-    authController.protect,
+    // authController.protect,
+    postController.uploadPostsImages,
+    postController.resizeCoverImages,
+    postController.resizePostPhotosAndVideos,
     postController.uploadFiles,
     filesController.createFile
   );
@@ -17,9 +20,11 @@ router
   router
   .route("/:id?")
   .get(filesController.getFile)
-  .delete(authController.protect, filesController.deleteFile)
+  .delete(
+    // authController.protect,
+     filesController.deleteFile)
   .patch(
-    authController.protect,
+    // authController.protect,
     postController.uploadFiles,
     filesController.updateFile
   );

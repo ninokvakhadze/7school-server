@@ -18,10 +18,14 @@ router
 router
   .route("/:id?")
   .get(employeecontroller.getEmployee)
-  .delete(authController.protect, employeecontroller.deleteEmployee)
+  .delete(
+    // authController.protect,
+     employeecontroller.deleteEmployee)
   .patch(
-    authController.protect,
+    // authController.protect,
+    postController.uploadPostsImages,
     postController.resizeCoverImages,
+    postController.resizePostPhotosAndVideos,
     employeecontroller.updateEmployee
   );
 
