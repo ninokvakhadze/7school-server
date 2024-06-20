@@ -25,6 +25,9 @@ router
      filesController.deleteFile)
   .patch(
     // authController.protect,
+    postController.uploadPostsImages,
+    postController.resizeCoverImages,
+    postController.resizePostPhotosAndVideos,
     postController.uploadFiles,
     filesController.updateFile
   );
